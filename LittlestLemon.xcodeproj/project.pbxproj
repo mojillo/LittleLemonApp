@@ -10,7 +10,6 @@
 		DC3737EC2C6928B000DA7627 /* ProjectReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3737EB2C6928B000DA7627 /* ProjectReq.swift */; };
 		DC3737EF2C6928F000DA7627 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3737EE2C6928F000DA7627 /* Onboarding.swift */; };
 		DC3737F12C692D0400DA7627 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3737F02C692D0400DA7627 /* Helper.swift */; };
-		DC3737F42C692FC000DA7627 /* SoemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3737F32C692FC000DA7627 /* SoemView.swift */; };
 		DC3737F62C6938B800DA7627 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3737F52C6938B800DA7627 /* Menu.swift */; };
 		DC3737F82C69399600DA7627 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3737F72C69399600DA7627 /* Home.swift */; };
 		DC3737FA2C693D6000DA7627 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3737F92C693D6000DA7627 /* UserProfile.swift */; };
@@ -23,7 +22,6 @@
 		DC3737EB2C6928B000DA7627 /* ProjectReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectReq.swift; sourceTree = "<group>"; };
 		DC3737EE2C6928F000DA7627 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		DC3737F02C692D0400DA7627 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
-		DC3737F32C692FC000DA7627 /* SoemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoemView.swift; sourceTree = "<group>"; };
 		DC3737F52C6938B800DA7627 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		DC3737F72C69399600DA7627 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		DC3737F92C693D6000DA7627 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -48,7 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				DC3737EE2C6928F000DA7627 /* Onboarding.swift */,
-				DC3737F32C692FC000DA7627 /* SoemView.swift */,
 				DC3737F52C6938B800DA7627 /* Menu.swift */,
 				DC3737F72C69399600DA7627 /* Home.swift */,
 				DC3737F92C693D6000DA7627 /* UserProfile.swift */,
@@ -174,7 +171,6 @@
 				DC3737F62C6938B800DA7627 /* Menu.swift in Sources */,
 				DC3737EC2C6928B000DA7627 /* ProjectReq.swift in Sources */,
 				DC3737EF2C6928F000DA7627 /* Onboarding.swift in Sources */,
-				DC3737F42C692FC000DA7627 /* SoemView.swift in Sources */,
 				DC3737FA2C693D6000DA7627 /* UserProfile.swift in Sources */,
 				DCB160A72C691B52006B048D /* LittlestLemonApp.swift in Sources */,
 				DC3737F12C692D0400DA7627 /* Helper.swift in Sources */,
