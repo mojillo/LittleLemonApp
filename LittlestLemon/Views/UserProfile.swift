@@ -11,6 +11,7 @@ struct UserProfile: View {
 
 	//MARK: - Variables
 	@Environment(\.presentationMode) var presenetaion
+	
 	let fName : String	 = UserDefaults.standard.string(forKey: kFirstName) ?? "-"
 	let lName : String	 = UserDefaults.standard.string(forKey: kLastName)	?? "-"
 	let email : String	 = UserDefaults.standard.string(forKey: kEmail)		?? "-"

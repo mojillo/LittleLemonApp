@@ -10,7 +10,7 @@ import SwiftUI
 struct Home: View {
     var body: some View {
 		TabView {
-			Menu().tabItem { Label("Menu", systemImage: "list.dash") }
+			Menu().tabItem { Label("Menu"	, systemImage: "list.dash") }
 			Menu().tabItem { Label("Profile", systemImage: "square.and.pencil") }
 		}
 		.navigationBarBackButtonHidden(true)

@@ -26,17 +26,14 @@ struct Onboarding	: View {
 	@State private var isLoggedIn 			: Bool		= false
 
     var body: some View {
-		NavigationView {
+		NavigationStack {
 
 			VStack {
-
-				NavigationLink (destination: Home()) {
-					// if else block for name and pass word to be non empty and make isloggin true 
-				}
-
+				NavigationLink(destination: Home(), isActive: $isLoggedIn) { }
 				TextField	("First Name"	, text: $firstName)
 				TextField	("Last Name"	, text: $lastName)
-				TextField	("Email"		, text: $emailVar)
+				TextField	("Email"		, text: $emailVar).keyboardType(.emailAddress)
+
 				Button		("Register") {
 
 					if firstName.isEmpty || lastName.isEmpty {
@@ -60,10 +57,11 @@ struct Onboarding	: View {
 					else {
 
 						showAlert			= false
-						UserDefaults.standard.setValue(firstName, forKey: kFirstName)
-						UserDefaults.standard.setValue(lastName	, forKey: kLastName)
-						UserDefaults.standard.setValue(emailVar	, forKey: kEmail)
-						UserDefaults.standard.setValue(true		, forKey: kIsLoggedIn)
+						isLoggedIn			= true
+						UserDefaults.standard.setValue(firstName	, forKey: kFirstName)
+						UserDefaults.standard.setValue(lastName		, forKey: kLastName)
+						UserDefaults.standard.setValue(emailVar		, forKey: kEmail)
+						UserDefaults.standard.setValue(isLoggedIn	, forKey: kIsLoggedIn)
 					}
 				}
 			}
@@ -71,11 +69,10 @@ struct Onboarding	: View {
 				if UserDefaults.standard.bool(forKey: kIsLoggedIn) {
 					isLoggedIn 	= true
 				}
-				else {
-					isLoggedIn	= false
-				}
 			}
 			.padding()
+			.textFieldStyle(.roundedBorder)
+			.disableAutocorrection(true)
 			.alert(isPresented: $showAlert) {
 				Alert(title: 			Text(""),
 					  message: 			Text(alertMessage),
