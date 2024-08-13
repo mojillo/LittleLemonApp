@@ -16,6 +16,20 @@ struct Menu: View {
 			Text("Little Lemon")
 			Text("Chicago").bold()
 			Text("Best center")
+			FetchedObjects {  (dishes: [Dish]) in
+				List(dishes, id:  \.self ) { dish in
+					HStack {
+						Text("\(dish.title) - $\(dish.price)")
+						AsyncImage(url: URL(string: dish.image!)) { image in
+							image.resizable()
+						} placeholder: {
+							 ProgressView()
+						}
+						.frame(width: 99, height: 99, alignment: .center)
+					}
+
+				}
+			}
 		}
 		.onAppear() {
 			getMenuData()
@@ -40,12 +54,12 @@ struct Menu: View {
 				if let onlineMenu = try? decoder.decode(MenuList.self, from: data) {
 
 					for dishes in onlineMenu.menu {
-						let dishData		= Dish(context: viewContext)
-						dishData.title		= dishes.title
-						dishData.price		= dishes.price
-						dishData.desc		= dishes.desc
-						dishData.image		= dishes.image
-						dishData.category	= dishes.category
+						let dishData				= Dish(context: viewContext)
+						dishData.title				= dishes.title
+						dishData.price				= dishes.price
+						dishData.descriptionDish	= dishes.descriptionDish
+						dishData.image				= dishes.image
+						dishData.category			= dishes.category
 					}
 					// save the data into the database
 					try? viewContext.save()
