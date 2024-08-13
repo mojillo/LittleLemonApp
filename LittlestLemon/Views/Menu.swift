@@ -11,71 +11,106 @@ struct Menu: View {
 
 	@Environment(\.managedObjectContext) private var viewContext
 
-    var body: some View {
-		VStack {
-			Text("Little Lemon")
-			Text("Chicago").bold()
-			Text("Best center")
-			FetchedObjects {  (dishes: [Dish]) in
-				List(dishes, id:  \.self ) { dish in
-					HStack {
-						Text("\(dish.title) - $\(dish.price)")
-						AsyncImage(url: URL(string: dish.image!)) { image in
-							image.resizable()
-						} placeholder: {
-							 ProgressView()
-						}
-						.frame(width: 99, height: 99, alignment: .center)
-					}
+	@State var startersIsEnabled 	: Bool	= true
+	@State var mainsIsEnabled 		: Bool	= true
+	@State var dessertsIsEnabled 	: Bool	= true
+	@State var drinksIsEnabled 		: Bool	= true
+	@State var loaded 				: Bool	= false
+	@State var isKeyboardVisible 	: Bool	= false
 
-				}
-			}
-		}
-		.onAppear() {
-			getMenuData()
-		}
-    }
+	@State var searchText = ""
 
-	/// Gets data from api url and stores it in the struct MenuItems and them creats an array viewContext: NSManagedObjectContext
-	func getMenuData(){
-
-		// clear the database each time before saving the menu list again
-		PersistenceController.shared.clear()
-
-		// holds server url string
-		let url				= URL(string: "https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu.json")
-		let requestURL		= URLRequest(url: url!)
-		let session			= URLSession.shared
-		let dataTask		= session.dataTask(with: requestURL) { dataFromApi, response, error in
-
-			if let data = dataFromApi {
-				let decoder = JSONDecoder()
-				
-				if let onlineMenu = try? decoder.decode(MenuList.self, from: data) {
-
-					for dishes in onlineMenu.menu {
-						let dishData				= Dish(context: viewContext)
-						dishData.title				= dishes.title
-						dishData.price				= dishes.price
-						dishData.descriptionDish	= dishes.descriptionDish
-						dishData.image				= dishes.image
-						dishData.category			= dishes.category
-					}
-					// save the data into the database
-					try? viewContext.save()
-				}
-				else { // output error if the try fails
-					print(error.debugDescription.description)
-				}
-			}
-			else { // output if the data type cast fails
-				print(error.debugDescription.description)
-			}
-		}
-		dataTask.resume()
+	init() {
+		UITextField.appearance().clearButtonMode = .whileEditing
 	}
+
+    var body: some View {
+		NavigationView {
+			VStack {
+				VStack {
+					if !isKeyboardVisible {
+						withAnimation() {
+							Hero()
+								.frame(maxHeight: 170)
+						}
+
+					}
+					TextField("Search menu", text: $searchText)
+
+						.textFieldStyle(.roundedBorder)
+				}
+				.padding()
+				.background(Color.primaryColor1)
+
+				Text("ORDER FOR DELIVERY!")
+					.font(.sectionTitle())
+					.foregroundColor(.highlightColor2)
+					.frame(maxWidth: .infinity, alignment: .leading)
+					.padding(.top)
+					.padding(.leading)
+				ScrollView(.horizontal, showsIndicators: false) {
+					HStack(spacing: 20) {
+						Toggle("Starters", isOn: $startersIsEnabled)
+						Toggle("Mains", isOn: $mainsIsEnabled)
+						Toggle("Desserts", isOn: $dessertsIsEnabled)
+						Toggle("Drinks", isOn: $drinksIsEnabled)
+					}
+					.toggleStyle(MyToggleStyle())
+					.padding(.horizontal)
+				}
+				FetchedObjects(predicate: buildPredicate(),
+							   sortDescriptors: buildSortDescriptors()) {
+					(dishes: [Dish]) in
+					List(dishes) { dish in
+						NavigationLink(destination: DetailItem(dish: dish)) {
+							FoodItem(dish: dish)
+						}
+					}
+					.listStyle(.plain)
+				}
+			}
+		}
+		.onAppear {
+			if !loaded {
+				MenuList.getMenuData(viewContext: viewContext)
+				loaded = true
+			}
+		}
+		.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+			withAnimation {
+				self.isKeyboardVisible = true
+			}
+
+		}
+		.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { notification in
+			withAnimation {
+				self.isKeyboardVisible = false
+			}
+		}
+	}
+
+	func buildSortDescriptors() -> [NSSortDescriptor] {
+		return [NSSortDescriptor(key: "title",
+								 ascending: true,
+								 selector:
+									#selector(NSString.localizedStandardCompare))]
+	}
+
+	func buildPredicate() -> NSCompoundPredicate {
+		let search = searchText == "" ? NSPredicate(value: true) : NSPredicate(format: "title CONTAINS[cd] %@", searchText)
+		let starters = !startersIsEnabled ? NSPredicate(format: "category != %@", "starters") : NSPredicate(value: true)
+		let mains = !mainsIsEnabled ? NSPredicate(format: "category != %@", "mains") : NSPredicate(value: true)
+		let desserts = !dessertsIsEnabled ? NSPredicate(format: "category != %@", "desserts") : NSPredicate(value: true)
+		let drinks = !drinksIsEnabled ? NSPredicate(format: "category != %@", "drinks") : NSPredicate(value: true)
+
+		let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [search, starters, mains, desserts, drinks])
+		return compoundPredicate
+	}
+
 }
 
-#Preview {
-    Menu()
+struct MenuPreviews: PreviewProvider {
+	static var previews: some View {
+		Menu().environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+	}
 }
